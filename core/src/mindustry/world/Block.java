@@ -13,6 +13,7 @@ import arc.struct.Array;
 import arc.struct.EnumSet;
 import arc.struct.*;
 import arc.util.*;
+import arc.util.ArcAnnotate.*;
 import arc.util.pooling.*;
 import mindustry.annotations.Annotations.*;
 import mindustry.ctype.*;
@@ -55,6 +56,10 @@ public class Block extends UnlockableContent{
     public final BlockBars bars = new BlockBars();
     public final Consumers consumes = new Consumers();
 
+    /** the last configuration value applied to this block. */
+    public @Nullable Object lastConfig;
+    /** whether to save the last config and apply it to newly placed blocks */
+    public boolean saveConfig = false;
     /** whether this block has a tile entity that updates */
     public boolean update;
     /** whether this block has health and can be destroyed */
@@ -286,7 +291,7 @@ public class Block extends UnlockableContent{
     }
 
     public void setStats(){
-        stats.add(BlockStat.size, "{0}x{0}", size);
+        stats.add(BlockStat.size, "@x@", size, size);
         stats.add(BlockStat.health, health, StatUnit.none);
         if(isBuildable()){
             stats.add(BlockStat.buildTime, buildCost / 60, StatUnit.seconds);
@@ -297,7 +302,7 @@ public class Block extends UnlockableContent{
 
         // Note: Power stats are added by the consumers.
         if(hasLiquids) stats.add(BlockStat.liquidCapacity, liquidCapacity, StatUnit.liquidUnits);
-        if(hasItems) stats.add(BlockStat.itemCapacity, itemCapacity, StatUnit.items);
+        if(hasItems && itemCapacity > 0) stats.add(BlockStat.itemCapacity, itemCapacity, StatUnit.items);
     }
 
     public void setBars(){

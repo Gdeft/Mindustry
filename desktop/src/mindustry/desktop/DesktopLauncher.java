@@ -40,7 +40,7 @@ public class DesktopLauncher extends ClientLauncher{
             new SdlApplication(new DesktopLauncher(arg), new SdlConfig(){{
                 title = "Mindustry";
                 maximized = true;
-                stencil = 0;
+                stencil = 8;
                 width = 900;
                 height = 700;
                 setWindowIcon(FileType.internal, "icons/icon_64.png");
@@ -150,7 +150,7 @@ public class DesktopLauncher extends ClientLauncher{
                         long id = Long.parseLong(args[1]);
                         ui.join.connect("steam:" + id, port);
                     }catch(Exception e){
-                        Log.err("Failed to parse steam lobby ID: {0}", e.getMessage());
+                        Log.err("Failed to parse steam lobby ID: @", e.getMessage());
                         e.printStackTrace();
                     }
                 }

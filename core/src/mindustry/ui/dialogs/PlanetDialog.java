@@ -81,9 +81,7 @@ public class PlanetDialog extends FloatingDialog{
             }
         });
 
-        Events.on(ResizeEvent.class, e -> {
-            makeBloom();
-        });
+        Events.on(ResizeEvent.class, e -> makeBloom());
 
 
         buttons.defaults().size(220f, 64f).pad(0f);
@@ -186,8 +184,8 @@ public class PlanetDialog extends FloatingDialog{
         //TODO hacky
         Shaders.planet.camDir.set(cam.direction).rotate(Vec3.Y, planet.getRotation());
 
-        projector.proj(cam.combined());
-        batch.proj(cam.combined());
+        projector.proj(cam.combined);
+        batch.proj(cam.combined);
 
         bloom.capture();
 
@@ -300,7 +298,7 @@ public class PlanetDialog extends FloatingDialog{
         Shaders.planetGrid.mouse.lerp(tile == null ? Vec3.Zero : tile.sub(planet.position).rotate(Vec3.Y, planet.getRotation()), 0.2f);
 
         shader.bind();
-        shader.setUniformMatrix4("u_proj", cam.combined().val);
+        shader.setUniformMatrix4("u_proj", cam.combined.val);
         shader.setUniformMatrix4("u_trans", planet.getTransform(mat).val);
         shader.apply();
         mesh.render(shader, Gl.lines);

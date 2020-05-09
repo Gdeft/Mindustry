@@ -95,12 +95,12 @@ public class SectorDataGenerator{
                 }
 
                 if(waterFloors / totalFloors >= 0.6f){
-                    Log.debug("Sector {0} has {1}/{2} water -> naval", sector.id, waterFloors, totalFloors);
+                    Log.debug("Sector @ has @/@ water -> naval", sector.id, waterFloors, totalFloors);
                 }
 
                 //naval sector guaranteed
                 if(nearTiles > 4){
-                    Log.debug("Sector {0} has {1} water tiles at {2} {3} -> naval", sector.id, nearTiles, cx, cy);
+                    Log.debug("Sector @ has @ water tiles at @ @ -> naval", sector.id, nearTiles, cx, cy);
                     waterFloors = totalFloors;
                 }
 
@@ -117,6 +117,18 @@ public class SectorDataGenerator{
                     data.floors[i] = entries.get(i).key;
                 }
 
+                //TODO bad code
+                boolean hasSnow = data.floors[0].name.contains("ice") || data.floors[0].name.contains("snow");
+                boolean hasRain = !hasSnow && data.floors[0].name.contains("water");
+
+                if(hasSnow){
+                    data.attributes |= (1 << SectorAttribute.snowy.ordinal());
+                }
+
+                if(hasRain){
+                    data.attributes |= (1 << SectorAttribute.rainy.ordinal());
+                }
+
                 data.resources = content.asArray().sort(Structs.comps(Structs.comparing(Content::getContentType), Structs.comparingInt(c -> c.id))).toArray(UnlockableContent.class);
 
                 //50% water -> naval attribute
@@ -125,7 +137,7 @@ public class SectorDataGenerator{
                 }
 
                 if(count[0]++ % 10 == 0){
-                    Log.info("&lyDone with sector &lm{0}/{1}", count[0], planet.sectors.size);
+                    Log.info("&lyDone with sector &lm@/@", count[0], planet.sectors.size);
                 }
 
                 return data;
